@@ -1,0 +1,134 @@
+#root {
+  max-width: 100%;
+  margin: 0;
+  padding: 0; 
+}
+
+.admin-layout{
+  display: flex;
+  min-height: 100%;
+}
+
+.dashboard{
+  background-color: aliceblue;
+  min-height: 100%;
+}
+
+.content {
+  flex: 1;  
+}
+
+.circle-icon {               
+  width: 36px;              
+  height: 36px;             
+  border-radius: 50%;       
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tick{
+  background-color: #B6FFA1;
+}
+
+.rotate{
+  color: blue;
+  background-color: rgb(206, 206, 245);
+}
+
+.clock{
+  color: rgb(131, 131, 3);
+  background-color: rgb(241, 241, 189);
+}
+
+.xmark{
+  color: red;
+  background-color: rgb(245, 215, 215);
+}
+
+.rect-icon {               
+  width: 36px;              
+  height: 36px;             
+  border-radius: 20%;       
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ 
+}
+
+.dollar{
+  color: white;
+  background-color: blue;
+}
+
+.line{
+  color: whitesmoke;
+  background-color: green;
+}
+
+.cart{
+  color: whitesmoke;
+  background-color: purple;
+}
+
+.users{
+  color: whitesmoke;
+  background-color: orangered;
+}
+
+.sidebar{
+  background-color: #FFDBFD;
+  width: 260px;
+  height: 100vh;
+}
+
+.sidebar-header{
+  display: inline-block;
+  margin: 20px;
+}
+
+.logo{
+  background-color: #FF3E9B;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 6px 10px rgba(255, 62, 155, 0.6);
+
+}
+.title{
+  color: rgb(249, 5, 139);
+  font-weight: bold;
+}
+.head{
+  line-height: 0.9;
+  color: rgb(192, 4, 192);
+}
+
+.sidebar-list{
+  list-style: none;  
+}
+
+.sidebar-list li{
+  margin-bottom: 12px;
+  
+}
+
+.sidebar-link{
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  color: rgb(249, 5, 139);
+  padding: 12px;
+  border-radius: 6px;
+  margin-right: 20px;
+}
+
+.sidebar-link i {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+.sidebar-link:hover {
+  background:  rgb(249, 5, 139);
+  color: white;
+}
