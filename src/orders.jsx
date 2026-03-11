@@ -23,7 +23,7 @@ function Orders() {
 
     // Fetch orders when component loads
   useEffect(() => {
-    fetch("http://localhost:5000/orders")
+    fetch("https://visual-dashboard-73i1.onrender.com")
       .then(res => res.json())
       .then(data => setOrder(data));
   }, []);
@@ -55,7 +55,7 @@ const handleAdd = async (e) => {
   const newOrder = { ...formData, id: Date.now() };
 
   try {
-    const response = await fetch("http://127.0.0.1:5000/orders", {
+    const response = await fetch("https://visual-dashboard-73i1.onrender.com", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newOrder),

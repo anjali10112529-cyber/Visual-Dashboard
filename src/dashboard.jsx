@@ -7,7 +7,7 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:5000/orders")
+    fetch("https://visual-dashboard-73i1.onrender.com")
       .then(res => res.json())
       .then(data => {
         setOrders(data);
