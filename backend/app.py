@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+
 from db import get_connection   # import your helper
+import uuid 
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route("/orders", methods=["GET"])
 def get_orders():
@@ -17,20 +19,34 @@ def get_orders():
 @app.route("/orders", methods=["POST"])
 def add_order():
     data = request.get_json()
+    print("Data received:", data)
+
     conn = get_connection()
     cursor = conn.cursor()
+
     sql = """
         INSERT INTO orders (id, user, service, link, qty, charges, status, date)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
     """
+    new_id = int(uuid.uuid4().int % 1000000)  # generate unique ID
+
     values = (
-        data["id"], data["user"], data["service"], data["link"],
-        data["qty"], data["charges"], data["status"], data["date"]
+        new_id,
+        data["user"],
+        data["service"],
+        data["link"],
+        data["qty"],
+        data["charges"],
+        data["status"],
+        data["date"],
     )
+
     cursor.execute(sql, values)
     conn.commit()
     conn.close()
-    return jsonify({"message": "Order added", "order": data}), 201
+
+    # Return the inserted order with the new id
+    return jsonify({"message": "Order added", "order": {**data, "id": new_id}}), 201
 
 @app.route("/orders/<int:order_id>", methods=["DELETE"])
 def delete_order(order_id):

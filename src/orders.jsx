@@ -25,7 +25,7 @@ const cancelledOrders = order.filter(
        o.status?.toLowerCase() === "canceled"
 ).length;
   const [formData, setFormData] = useState({
-        id: '',
+        
         user: '',
         service: '',
         link: '',
@@ -66,22 +66,22 @@ const handleAdd = async (e) => {
     return;
   }
 
-  const newOrder = { ...formData, id: Date.now() };
+const { id, ...dataToSend } = formData; 
 
   try {
     const response = await fetch("https://visual-dashboard-73i1.onrender.com/orders", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newOrder),
+      body: JSON.stringify(formData),
     });
 
     const data = await response.json();
     console.log("Response from backend:", data);
 
-    setOrder([...order, newOrder]);
+    setOrder([...order, data.order]);
 
     setFormData({
-      id: "",
+      
       user: "",
       service: "",
       link: "",
@@ -239,11 +239,8 @@ const handleAdd = async (e) => {
               <h4 className='text-center'>Add Order</h4>
             </div>
               <div className='modal-body'>
-                <form>
-                  <div className='w-100 m-2 p-2'>
-                    <label className='form-label'>Id</label>
-                    <input ref={brandRef} value={formData.id} onChange={handleChange} type='text' name='id' className='form-control'></input>
-                  </div>
+                <form onSubmit={handleAdd}>
+                  
                   <div className='w-100 m-2 p-2'>
                     <label className='form-label'>User</label>
                     <input type='text' name='user' value={formData.user} onChange={handleChange}  className='form-control'></input>
@@ -280,7 +277,7 @@ const handleAdd = async (e) => {
               </div>
               <div className='modal-footer mx-auto'>
                 <button type='button' className='btn btn-danger' data-bs-dismiss='modal'>Cancel</button>
-                <button type='button' className='btn btn-success' onClick={handleAdd}>Add</button>                            
+                <button type='submit' className='btn btn-success' >Add</button>                            
               </div>
             </div>
           </div>
