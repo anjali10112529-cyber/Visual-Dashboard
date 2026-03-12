@@ -1,28 +1,45 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS   # Import CORS
+from flask_cors import CORS
+from db import get_connection   # import your helper
 
 app = Flask(__name__)
-
-# Enable CORS for all routes (React will run on a different port)
 CORS(app)
-
-# Temporary in-memory storage (replace with DB later)
-orders = []
 
 @app.route("/orders", methods=["GET"])
 def get_orders():
-    return jsonify(orders)
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM orders")
+    result = cursor.fetchall()
+    conn.close()
+    return jsonify(result)
 
 @app.route("/orders", methods=["POST"])
 def add_order():
-    data = request.json
-    orders.append(data)
+    data = request.get_json()
+    conn = get_connection()
+    cursor = conn.cursor()
+    sql = """
+        INSERT INTO orders (id, user, service, link, qty, charges, status, date)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    """
+    values = (
+        data["id"], data["user"], data["service"], data["link"],
+        data["qty"], data["charges"], data["status"], data["date"]
+    )
+    cursor.execute(sql, values)
+    conn.commit()
+    conn.close()
     return jsonify({"message": "Order added", "order": data}), 201
 
 @app.route("/orders/<int:order_id>", methods=["DELETE"])
 def delete_order(order_id):
-    global orders
-    orders = [o for o in orders if o.get("id") != order_id]
+    conn = get_connection()
+    cursor = conn.cursor()
+    sql = "DELETE FROM orders WHERE id = %s"
+    cursor.execute(sql, (order_id,))
+    conn.commit()
+    conn.close()
     return jsonify({"message": f"Order {order_id} deleted"}), 200
 
 if __name__ == "__main__":

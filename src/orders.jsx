@@ -4,19 +4,33 @@ import React, {useState, useEffect, useRef} from 'react';
 
 function Orders() {
   const [order, setOrder] = useState([]);
+  
   const totalOrders = order.length;
-  const completedOrders = order.filter(o => o.status.toLowerCase() === "completed").length;
-  const processingOrders = order.filter(o => o.status.toLowerCase() === "processing" || o.status.toLowerCase() === "progressing").length;
-  const pendingOrders = order.filter(o => o.status.toLowerCase() === "pending").length;
-  const cancelledOrders = order.filter(o => o.status.toLowerCase() === "cancelled" || o.status.toLowerCase() === "canceled").length;
 
+const completedOrders = order.filter(
+  o => o.status?.toLowerCase() === "completed"
+).length;
+
+const processingOrders = order.filter(
+  o => o.status?.toLowerCase() === "processing" ||
+       o.status?.toLowerCase() === "progressing"
+).length;
+
+const pendingOrders = order.filter(
+  o => o.status?.toLowerCase() === "pending"
+).length;
+
+const cancelledOrders = order.filter(
+  o => o.status?.toLowerCase() === "cancelled" ||
+       o.status?.toLowerCase() === "canceled"
+).length;
   const [formData, setFormData] = useState({
         id: '',
         user: '',
         service: '',
         link: '',
         qty: 0,
-        charge: 0,
+        charges: 0,
         status:'',
         date:''
     });
@@ -37,7 +51,7 @@ function Orders() {
   setFormData({
     ...formData,
     [name]:
-      name === "qty" || name === "charge"
+      name === "qty" || name === "charges"
         ? Number(value)   // convert numeric fields
         : value           // keep others as strings
   });
@@ -64,7 +78,7 @@ const handleAdd = async (e) => {
     const data = await response.json();
     console.log("Response from backend:", data);
 
-    setOrder([...order, data.order]);
+    setOrder([...order, newOrder]);
 
     setFormData({
       id: "",
@@ -72,7 +86,7 @@ const handleAdd = async (e) => {
       service: "",
       link: "",
       qty: 0,
-      charge: 0,
+      charges: 0,
       status: "",
       date: "",
     });
@@ -197,7 +211,7 @@ const handleAdd = async (e) => {
               <td>Service</td>
               <td>Link</td>
               <td>Qty</td>
-              <td>Charge</td>
+              <td>Charges</td>
               <td>Status</td>
               <td>Date</td>
             </tr>
@@ -210,7 +224,7 @@ const handleAdd = async (e) => {
               <td>{o.service}</td>
               <td>{o.link}</td>
               <td>{o.qty}</td>
-              <td>{o.charge}</td>
+              <td>{o.charges}</td>
               <td>{o.status}</td>
               <td>{o.date}</td>
             </tr>
@@ -250,7 +264,7 @@ const handleAdd = async (e) => {
                     </div>
                     <div className='w-100 m-2 p-2'>
                       <label className='form-label'>Charge</label>
-                      <input type='text' name='charge'  value={formData.charge} onChange={handleChange} className='form-control'></input>
+                      <input type='text' name='charges'  value={formData.charges} onChange={handleChange} className='form-control'></input>
                     </div>
                     <div className='row mb-2'>
                     <div className='col-6 '>
