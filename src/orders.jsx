@@ -37,7 +37,7 @@ const cancelledOrders = order.filter(
 
     // Fetch orders when component loads
   useEffect(() => {
-    fetch("http://localhost:5000/orders")
+    fetch("https://dashboard-gq96.onrender.com/orders")
       .then(res => res.json())
       .then(data => setOrder(data));
   }, []);
@@ -69,7 +69,7 @@ const handleAdd = async (e) => {
   try {
     console.log("Sending order:", formData);
 
-    const response = await fetch("http://localhost:5000/orders", {
+    const response = await fetch("https://dashboard-gq96.onrender.com/orders", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),

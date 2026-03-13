@@ -7,7 +7,7 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:5000/orders")
+    fetch("https://dashboard-gq96.onrender.com/orders")
       .then(res => res.json())
       .then(data => {
         setOrders(data);

@@ -7,18 +7,18 @@ const app = express();
 
 // ✅ Allow all origins during development
 app.use(cors());
-
-
 app.use(express.json());
 
-// Database connection pool
+// ✅ Database connection pool using environment variables
 const db = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'ordersdb'
+  host: process.env.MYSQLHOST,
+  user: process.env.MYSQLUSER,
+  password: process.env.MYSQLPASSWORD,
+  database: process.env.MYSQLDATABASE,
+  port: process.env.MYSQLPORT
 });
 
+// Test connection
 db.getConnection()
   .then(conn => {
     console.log("Database connected successfully!");
@@ -32,13 +32,13 @@ db.getConnection()
 function normalizeRow(r) {
   return {
     id: r.id,
-    user: r.user || r.User,
-    service: r.service || r.Service,
-    link: r.link || r.Link,
-    qty: r.qty || r.Qty,
-    charges: r.charges || r.Charges,
-    status: r.status || r.Status,
-    date: r.date || r.Date
+    user: r.user,
+    service: r.service,
+    link: r.link,
+    qty: r.qty,
+    charges: r.charges,
+    status: r.status,
+    date: r.date
   };
 }
 
@@ -132,6 +132,31 @@ app.delete('/orders/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to delete order' });
   }
 });
+
+// PUT update order by ID
+app.put('/orders/:id', async (req, res) => {
+  try {
+    const orderId = req.params.id;
+    const { user, service, link, qty, charges, status, date } = req.body;
+
+    console.log("Updating order:", orderId, req.body);
+
+    // Update the order in Railway MySQL
+    await db.query(
+      'UPDATE orders SET user=?, service=?, link=?, qty=?, charges=?, status=?, date=? WHERE id=?',
+      [user, service, link, qty, charges, status, date, orderId]
+    );
+
+    res.json({
+      message: `Order ${orderId} updated`,
+      order: { id: orderId, user, service, link, qty, charges, status, date }
+    });
+  } catch (err) {
+    console.error("Error updating order:", err.message);
+    res.status(500).json({ error: 'Failed to update order' });
+  }
+});
+
 
 // Start server
 const PORT = process.env.PORT || 5000;
