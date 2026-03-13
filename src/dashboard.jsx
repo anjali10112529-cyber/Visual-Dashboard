@@ -7,7 +7,7 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://visual-dashboard-73i1.onrender.com/orders")
+    fetch("http://localhost:5000/orders")
       .then(res => res.json())
       .then(data => {
         setOrders(data);
@@ -25,8 +25,8 @@ function Dashboard() {
       {
         label: "Revenue Distribution",
         data: orders.map(o => ({
-          x: o.qty || 0,
-          y: o.charge || 0
+          x: o.qty || 0,       // lowercase
+          y: o.charges || 0    // lowercase
         })),
         backgroundColor: "rgba(75,192,192,1)"
       }
@@ -53,9 +53,8 @@ function Dashboard() {
     Object.values(statusCounts).reduce((a, b) => a + b, 0) || 1;
 
   // Metrics
-  const totalRevenue = orders.reduce((sum, o) => sum + (o.charge || 0), 0);
+  const totalRevenue = orders.reduce((sum, o) => sum + (o.charges || 0), 0);
   const netProfit = totalRevenue * 0.35;
-
   const activeUsers = new Set(orders.map(o => o.user)).size;
 
   if (loading) {

@@ -37,7 +37,7 @@ const cancelledOrders = order.filter(
 
     // Fetch orders when component loads
   useEffect(() => {
-    fetch("https://visual-dashboard-73i1.onrender.com/orders")
+    fetch("http://localhost:5000/orders")
       .then(res => res.json())
       .then(data => setOrder(data));
   }, []);
@@ -66,14 +66,18 @@ const handleAdd = async (e) => {
     return;
   }
 
-const { id, ...dataToSend } = formData; 
-
   try {
-    const response = await fetch("https://visual-dashboard-73i1.onrender.com/orders", {
+    console.log("Sending order:", formData);
+
+    const response = await fetch("http://localhost:5000/orders", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
     });
+
+    if (!response.ok) {
+      throw new Error(`Server error: ${response.status}`);
+    }
 
     const data = await response.json();
     console.log("Response from backend:", data);
@@ -81,7 +85,6 @@ const { id, ...dataToSend } = formData;
     setOrder([...order, data.order]);
 
     setFormData({
-      
       user: "",
       service: "",
       link: "",
@@ -94,8 +97,10 @@ const { id, ...dataToSend } = formData;
     if (brandRef.current) brandRef.current.focus();
   } catch (err) {
     console.error("Error adding order:", err);
+    alert("Failed to add order. Check console for details.");
   }
 };
+
 
   return (
     <div className='bg-light content'>
@@ -273,12 +278,13 @@ const { id, ...dataToSend } = formData;
                         <input type='text' name='date' value={formData.date} onChange={handleChange}  className='form-control'></input>
                       </div>
                     </div>
+                    <div className='modal-footer mx-auto'>
+                      <button type='button' className='btn btn-danger' data-bs-dismiss='modal'>Cancel</button>
+                      <button type='submit' className='btn btn-success' >Add</button>                            
+                    </div>
                 </form>
               </div>
-              <div className='modal-footer mx-auto'>
-                <button type='button' className='btn btn-danger' data-bs-dismiss='modal'>Cancel</button>
-                <button type='submit' className='btn btn-success' >Add</button>                            
-              </div>
+              
             </div>
           </div>
         </div>
